@@ -2,6 +2,7 @@
 
 [![Tests](https://img.shields.io/badge/Tests-Passing-success)](https://github.com/abeaudat/coingecko-api-testing)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.x-brightgreen)](https://nodejs.org)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![TypeScript](https://img.shields.io/badge/TypeScript-%5E5.0.0-blue)](https://www.typescriptlang.org/)
 [![Jest](https://img.shields.io/badge/Jest-%5E29.5.0-red)](https://jestjs.io/)
 
@@ -100,7 +101,7 @@ npm run test:all
 
 ## 📊 Test Reports
 
-### Jest Reports
+### Jest & Postman Reports
 ```
 📁 reports/
 ├── 📊 jest/
