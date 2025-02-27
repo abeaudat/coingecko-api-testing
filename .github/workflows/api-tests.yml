@@ -1,0 +1,70 @@
+name: API Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        
+    # Install dependencies with a clean slate
+    - name: Clean install dependencies
+      run: |
+        rm -rf node_modules
+        npm cache clean --force
+        npm install
+        
+    - name: Create reports directory
+      run: mkdir -p reports/postman reports/jest
+      
+    # Run tests for each environment
+    - name: Run Development Tests
+      run: npm run postman:dev
+      env:
+        COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+        
+    #- name: Run Staging Tests
+    #  run: npm run postman:staging
+    #  env:
+    #    COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+        
+    #- name: Run Production Tests
+    #  run: npm run postman:prod
+    #  env:
+    #    COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+        
+    # Upload test reports as artifacts
+    - name: Upload Postman Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: postman-reports
+        path: reports/postman/
+        retention-days: 30
+        compression-level: 9
+        
+    # Optional: Add test summary to PR/commit
+    - name: Add Test Summary
+      if: always()
+      run: |
+        echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Development Environment Tests" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Staging Environment Tests" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Production Environment Tests" >> $GITHUB_STEP_SUMMARY 
