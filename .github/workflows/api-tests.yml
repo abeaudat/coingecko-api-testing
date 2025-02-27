@@ -66,5 +66,5 @@ jobs:
       run: |
         echo "### Test Results" >> $GITHUB_STEP_SUMMARY
         echo "✅ Development Environment Tests" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Staging Environment Tests" >> $GITHUB_STEP_SUMMARY
-        echo "✅ Production Environment Tests" >> $GITHUB_STEP_SUMMARY 
+      #  echo "✅ Staging Environment Tests" >> $GITHUB_STEP_SUMMARY
+      #  echo "✅ Production Environment Tests" >> $GITHUB_STEP_SUMMARY 
