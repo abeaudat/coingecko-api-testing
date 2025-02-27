@@ -5,8 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
     "performance": "k6 run -e COINGECKO_API_KEY=$COINGECKO_API_KEY -e COINGECKO_API_URL=$COINGECKO_API_URL tests/k6/performance.js",
     "performance:report": "k6 run -e COINGECKO_API_KEY=$COINGECKO_API_KEY -e COINGECKO_API_URL=$COINGECKO_API_URL tests/k6/performance.js --out json=results.json && node tests/k6/visualize.js results.json",
     "performance:safe": "k6 run -e COINGECKO_API_KEY=$COINGECKO_API_KEY -e COINGECKO_API_URL=$COINGECKO_API_URL --vus 3 --duration 30s tests/k6/performance.js",
@@ -16,7 +14,6 @@
     "postman:staging": "npx newman run tests/postman/CoinGecko.postman_collection.json -e tests/postman/environments/staging.postman_environment.json --env-var COINGECKO_API_KEY=$COINGECKO_API_KEY -r cli,htmlextra,json --reporter-htmlextra-export reports/postman/staging-report.html --reporter-json-export reports/postman/staging-report.json",
     "postman:prod": "npx newman run tests/postman/CoinGecko.postman_collection.json -e tests/postman/environments/production.postman_environment.json --env-var COINGECKO_API_KEY=$COINGECKO_API_KEY -r cli,htmlextra,json --reporter-htmlextra-export reports/postman/prod-report.html --reporter-json-export reports/postman/prod-report.json",
     "test:security": "jest tests/security/coins_markets.security.test.ts",
-    "test:security:watch": "jest tests/security/coins_markets.security.test.ts --watch",
     "test:all": "jest tests/api.test.ts tests/security/coins_markets.security.test.ts && npm run performance && npm run postman"
   },
   "keywords": [
