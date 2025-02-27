@@ -7,7 +7,7 @@
 [![Jest](https://img.shields.io/badge/Jest-%5E29.5.0-red)](https://jestjs.io/)
 
 
-> A comprehensive testing suite for the CoinGecko API, featuring functional tests, security tests, performance tests, and Postman collections. Built with TypeScript and modern testing practices.
+> A comprehensive testing suite for the CoinGecko API, featuring functional tests, security tests, performance tests, and Postman collections. Built with TypeScript/Javascript and modern testing practices.
 
 <div align="center">
   <img src="https://cdn.freelogovectors.net/wp-content/uploads/2021/12/coingecko_logo-freelogovectors.net_.png" alt="CoinGecko API" width="600"/>
