@@ -114,7 +114,7 @@ npm run test:all
 
 ## 🔄 CI/CD Integration
 
-Our GitHub Actions workflow provides:
+The GitHub Actions workflow provides:
 
 - ✅ Automated testing on push/PR
 - 📊 Test report generation
