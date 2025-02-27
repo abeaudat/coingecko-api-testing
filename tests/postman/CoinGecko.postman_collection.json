@@ -1,0 +1,243 @@
+{
+    "info": {
+        "name": "CoinGecko API Tests",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "exec": [
+                    "// Wait for the configured delay between requests",
+                    "setTimeout(function(){}, pm.environment.get('requestDelay'));"
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "{{baseUrl}}"
+        }
+    ],
+    "auth": {
+        "type": "apikey",
+        "apikey": [
+            {
+                "key": "value",
+                "value": "{{COINGECKO_API_KEY}}",
+                "type": "string"
+            },
+            {
+                "key": "key",
+                "value": "x-cg-demo-api-key",
+                "type": "string"
+            },
+            {
+                "key": "in",
+                "value": "header",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "Simple Price",
+            "item": [
+                {
+                    "name": "Get Bitcoin Price",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/simple/price?ids=bitcoin,ethereum,ripple,cardano,solana&vs_currencies=usd,eur,gbp,jpy&include_24hr_change=true",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["simple", "price"],
+                            "query": [
+                                {
+                                    "key": "ids",
+                                    "value": "bitcoin,ethereum,ripple,cardano,solana"
+                                },
+                                {
+                                    "key": "vs_currencies",
+                                    "value": "usd,eur,gbp,jpy"
+                                },
+                                {
+                                    "key": "include_24hr_change",
+                                    "value": "true"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const maxRetries = parseInt(pm.environment.get('retryAttempts'));",
+                                    "let currentRetry = parseInt(pm.variables.get('currentRetry') || '0');",
+                                    "",
+                                    "if (pm.response.code === 429 && currentRetry < maxRetries) {",
+                                    "    currentRetry++;",
+                                    "    pm.variables.set('currentRetry', currentRetry);",
+                                    "    postman.setNextRequest(pm.info.requestName);",
+                                    "    return;",
+                                    "}",
+                                    "",
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response contains prices for all cryptocurrencies', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    const coins = ['bitcoin', 'ethereum', 'ripple', 'cardano', 'solana'];",
+                                    "    const currencies = ['usd', 'eur', 'gbp', 'jpy'];",
+                                    "",
+                                    "    coins.forEach(coin => {",
+                                    "        pm.expect(jsonData).to.have.property(coin);",
+                                    "        currencies.forEach(currency => {",
+                                    "            pm.expect(jsonData[coin]).to.have.property(currency);",
+                                    "            pm.expect(jsonData[coin][currency]).to.be.a('number');",
+                                    "            pm.expect(jsonData[coin][currency + '_24h_change']).to.be.a('number');",
+                                    "        });",
+                                    "    });",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Coin Markets",
+            "item": [
+                {
+                    "name": "Get Bitcoin Market Data",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,ripple,cardano,solana&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["coins", "markets"],
+                            "query": [
+                                {
+                                    "key": "vs_currency",
+                                    "value": "usd"
+                                },
+                                {
+                                    "key": "ids",
+                                    "value": "bitcoin,ethereum,ripple,cardano,solana"
+                                },
+                                {
+                                    "key": "order",
+                                    "value": "market_cap_desc"
+                                },
+                                {
+                                    "key": "per_page",
+                                    "value": "100"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "sparkline",
+                                    "value": "false"
+                                },
+                                {
+                                    "key": "price_change_percentage",
+                                    "value": "24h"
+                                }
+                            ]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const maxRetries = parseInt(pm.environment.get('retryAttempts'));",
+                                    "let currentRetry = parseInt(pm.variables.get('currentRetry') || '0');",
+                                    "",
+                                    "if (pm.response.code === 429 && currentRetry < maxRetries) {",
+                                    "    currentRetry++;",
+                                    "    pm.variables.set('currentRetry', currentRetry);",
+                                    "    postman.setNextRequest(pm.info.requestName);",
+                                    "    return;",
+                                    "}",
+                                    "",
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response contains market data for all coins', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    const coins = ['bitcoin', 'ethereum', 'ripple', 'cardano', 'solana'];",
+                                    "",
+                                    "    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(coins.length);",
+                                    "",
+                                    "    jsonData.forEach(coin => {",
+                                    "        pm.expect(coins).to.include(coin.id);",
+                                    "        pm.expect(coin).to.have.property('current_price');",
+                                    "        pm.expect(coin).to.have.property('market_cap');",
+                                    "        pm.expect(coin).to.have.property('price_change_percentage_24h');",
+                                    "        pm.expect(coin.current_price).to.be.a('number');",
+                                    "        pm.expect(coin.market_cap).to.be.a('number');",
+                                    "        pm.expect(coin.price_change_percentage_24h).to.be.a('number');",
+                                    "    });",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Coin List",
+            "item": [
+                {
+                    "name": "Get All Coins",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/coins/list",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["coins", "list"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "const maxRetries = parseInt(pm.environment.get('retryAttempts'));",
+                                    "let currentRetry = parseInt(pm.variables.get('currentRetry') || '0');",
+                                    "",
+                                    "if (pm.response.code === 429 && currentRetry < maxRetries) {",
+                                    "    currentRetry++;",
+                                    "    pm.variables.set('currentRetry', currentRetry);",
+                                    "    postman.setNextRequest(pm.info.requestName);",
+                                    "    return;",
+                                    "}",
+                                    "",
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response contains coin list', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array').that.is.not.empty;",
+                                    "    pm.expect(jsonData[0]).to.have.property('id');",
+                                    "    pm.expect(jsonData[0]).to.have.property('symbol');",
+                                    "    pm.expect(jsonData[0]).to.have.property('name');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+} 
