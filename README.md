@@ -40,6 +40,30 @@
 - 🚄 k6 (for performance testing)
 - 🔄 Git (for version control)
 
+## 📁 Repository Structure
+
+```
+coingecko-api-testing/
+├── 📁 .github/              # GitHub Actions workflows
+├── 📁 coverage/             # Test coverage reports
+├── 📁 node_modules/         # Dependencies
+├── 📁 reports/              # Test reports
+│   ├── 📊 jest/            # Jest test reports
+│   └── 📊 postman/         # Postman test reports
+├── 📁 tests/               # Test suites
+│   ├── 📁 k6/             # K6 performance tests
+│   ├── 📁 manual/         # Manual test scripts
+│   ├── 📁 postman/        # Postman collections
+│   ├── 📁 security/       # Security test suites
+│   ├── 📄 api.test.ts     # Main API tests
+│   └── 📄 config.ts       # Test configuration
+├── 📄 .env                 # Environment variables
+├── 📄 .env.example        # Example environment file
+├── 📄 package.json        # Project configuration
+├── 📄 tsconfig.json       # TypeScript configuration
+└── 📄 README.md           # Project documentation
+```
+
 ## 🚀 Quick Start
 
 1. **Clone the repository**
