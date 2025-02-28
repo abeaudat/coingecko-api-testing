@@ -1,6 +1,6 @@
 # 📊 CoinGecko API Testing Report
 
-> **Report Generated**: February 28, 2025 10:36:36  
+> **Report Date**: February 28, 2025  
 > **Status**: ✅ 100% Tests Passing
 
 ---
